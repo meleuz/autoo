@@ -1,53 +1,68 @@
 package ru.netology;
 
 import com.github.javafaker.Faker;
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
+@Data
+@NoArgsConstructor
 public class DataGenerator {
-    private DataGenerator() {
-    }
 
     public static Faker faker = new Faker(new Locale("ru"));
+    public static Faker fakereng = new Faker(new Locale("eng"));
 
-    public static String generateDate(int shift) {
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        LocalDate date = LocalDate.now();
-        return date.plusDays(shift).format(dateFormat);
+    public static String getRandomCity() {
+        List<String> list = Arrays.asList("Нижний Новгород", "Москва", "Санкт-Петербург", "Казань", "Йошкар-Ола", "Новосибирск", "Хабаровск");
+        Random random = new Random();
+        String randomCity = list.get(random.nextInt(list.size()));
+        return randomCity;
     }
 
-    public static String generateCity(String locale) {
-        String city = faker.address().city();
-        return city;
+    public static String getNotCorrectCity() {
+        String notCorrectCity = fakereng.address().cityName();
+        return notCorrectCity;
     }
 
-    public static String generateName(String locale) {
+    public static String getCorrectDate(int days) {
+        String dateOfDelivery = LocalDate.now().plusDays(days).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        return dateOfDelivery;
+    }
+
+    public static String getNotCorrectDate() {
+        String notCorrectDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        return notCorrectDate;
+    }
+
+    public static String getRandomName() {
         String name = faker.name().lastName() + " " + faker.name().firstName();
         return name;
     }
 
-    public static String generatePhone(String locale) {
+    public static String getNotCorrectName() {
+        String notCorrectName = fakereng.name().fullName();
+        return notCorrectName;
+    }
+
+    public static String getNotCorrectNameWithYo() {
+        String notCorrectName = "Мараева Алёна";
+        return notCorrectName;
+    }
+
+    public static String getRandomPhone() {
         String phone = faker.phoneNumber().phoneNumber();
         return phone;
     }
 
-    public static class Registration {
-        private Registration() {
-        }
-
-        public static UserInfo generateUser(String locale) {
-            UserInfo user = new UserInfo(generateCity(locale), generateName(locale), generatePhone(locale));
-            return user;
-        }
+    public static String getNotCorrectPhone() {
+        String phone ="000";
+        return phone;
     }
 
-    @Value
-    public static class UserInfo {
-        String city;
-        String name;
-        String phone;
-    }
 }
